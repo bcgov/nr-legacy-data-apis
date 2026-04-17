@@ -2,6 +2,20 @@
 .env.*
 !.env.example
 
+# Java and JVM build/runtime artifacts
+*.class
+*.ctxt
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+*.mtj.tmp/
+hs_err_pid*
+replay_pid*
+
 # ORDS runtime-generated configuration, credentials, wallets, and self-signed certs
 ords/config/databases/
 ords/config/global/
