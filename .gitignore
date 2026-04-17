@@ -2,9 +2,19 @@
 .env.*
 !.env.example
 
-# Java and JVM build/runtime artifacts
+# Compiled class file
 *.class
+
+# Log file
+*.log
+
+# BlueJ files
 *.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
 *.jar
 *.war
 *.nar
@@ -12,7 +22,6 @@
 *.zip
 *.tar.gz
 *.rar
-*.mtj.tmp/
 hs_err_pid*
 replay_pid*
 
@@ -20,5 +29,3 @@ replay_pid*
 ords/config/databases/
 ords/config/global/
 
-# Common local noise
-*.log
