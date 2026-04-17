@@ -1,0 +1,150 @@
+@db2rest = http://localhost:8081
+@ords = http://localhost:8080
+@dab = http://localhost:5000
+@dbId = oracle
+@ordsSchema = legacy-app
+@fieldSiteFields = SITE_ID,CUSTOMER_ID,SITE_NAME,SITE_TYPE,STATUS,INSTALLED_ON,LOCATION_GEOJSON
+
+### DB2REST health
+GET {{db2rest}}/actuator/health
+Accept: application/json
+
+### DB2REST OpenAPI 3 document
+GET {{db2rest}}/v3/api-docs
+Accept: application/json
+
+### DB2REST database info
+GET {{db2rest}}/v1/rdbms/$dbs
+Accept: application/json
+
+### DB2REST schema objects
+GET {{db2rest}}/v1/rdbms/{{dbId}}/$schemas
+Accept: application/json
+
+### DB2REST schema objects with columns
+GET {{db2rest}}/v1/rdbms/{{dbId}}/$schemas?columns=true
+Accept: application/json
+
+### All seeded customers
+GET {{db2rest}}/v1/rdbms/{{dbId}}/CUSTOMERS
+Accept: application/json
+
+### Customer count
+GET {{db2rest}}/v1/rdbms/{{dbId}}/CUSTOMERS/count
+Accept: application/json
+
+### One customer row
+GET {{db2rest}}/v1/rdbms/{{dbId}}/CUSTOMERS/one
+Accept: application/json
+
+### All seeded work orders
+GET {{db2rest}}/v1/rdbms/{{dbId}}/WORK_ORDERS
+Accept: application/json
+
+### Work order count
+GET {{db2rest}}/v1/rdbms/{{dbId}}/WORK_ORDERS/count
+Accept: application/json
+
+### One work order row
+GET {{db2rest}}/v1/rdbms/{{dbId}}/WORK_ORDERS/one
+Accept: application/json
+
+### Field sites with API-safe projected geometry
+GET {{db2rest}}/v1/rdbms/{{dbId}}/FIELD_SITES?fields={{fieldSiteFields}}
+Accept: application/json
+
+### Field site count
+GET {{db2rest}}/v1/rdbms/{{dbId}}/FIELD_SITES/count
+Accept: application/json
+
+### One field site row with projected geometry
+GET {{db2rest}}/v1/rdbms/{{dbId}}/FIELD_SITES/one?fields={{fieldSiteFields}}
+Accept: application/json
+
+### Vancouver control point with projected geometry
+GET {{db2rest}}/v1/rdbms/{{dbId}}/FIELD_SITES?fields={{fieldSiteFields}}&filter=SITE_NAME=="Vancouver%20Control%20Point"
+Accept: application/json
+
+# Note:
+# The raw FIELD_SITES endpoint includes Oracle SDO_GEOMETRY and currently fails JSON serialization in db2rest v1.6.8.
+# Use the projected LOCATION_GEOJSON field above instead.
+
+### ORDS base endpoint
+GET {{ords}}/ords/
+Accept: application/json
+
+### ORDS database API metadata catalog
+GET {{ords}}/ords/_/db-api/stable/metadata-catalog/
+Accept: application/json
+
+### ORDS customers collection
+GET {{ords}}/ords/{{ordsSchema}}/customers/
+Accept: application/json
+
+### ORDS one customer row
+GET {{ords}}/ords/{{ordsSchema}}/customers/1
+Accept: application/json
+
+### ORDS customers metadata catalog
+GET {{ords}}/ords/{{ordsSchema}}/metadata-catalog/customers/
+Accept: application/json
+
+### ORDS customers OpenAPI
+GET {{ords}}/ords/{{ordsSchema}}/open-api-catalog/customers/
+Accept: application/json
+
+### ORDS work orders collection
+GET {{ords}}/ords/{{ordsSchema}}/work_orders/
+Accept: application/json
+
+### ORDS one work order row
+GET {{ords}}/ords/{{ordsSchema}}/work_orders/1
+Accept: application/json
+
+### ORDS work orders metadata catalog
+GET {{ords}}/ords/{{ordsSchema}}/metadata-catalog/work_orders/
+Accept: application/json
+
+### ORDS work orders OpenAPI
+GET {{ords}}/ords/{{ordsSchema}}/open-api-catalog/work_orders/
+Accept: application/json
+
+### ORDS field sites collection with raw Oracle spatial output
+GET {{ords}}/ords/{{ordsSchema}}/field_sites/
+Accept: application/json
+
+### ORDS Vancouver field site by primary key
+GET {{ords}}/ords/{{ordsSchema}}/field_sites/1
+Accept: application/json
+
+### ORDS Vancouver field site via QBE filter
+GET {{ords}}/ords/{{ordsSchema}}/field_sites/?q={"site_name":{"$eq":"Vancouver Control Point"}}
+Accept: application/json
+
+### ORDS field sites metadata catalog
+GET {{ords}}/ords/{{ordsSchema}}/metadata-catalog/field_sites/
+Accept: application/json
+
+### ORDS field sites OpenAPI
+GET {{ords}}/ords/{{ordsSchema}}/open-api-catalog/field_sites/
+Accept: application/json
+
+# Note:
+# Unlike DB2REST, ORDS returned the raw Oracle SDO_GEOMETRY column successfully as a structured JSON object
+# with location.srid and location.point.directposition.
+
+# Note:
+# DAB is mounted, but dab/dab-config.json currently defines no entities.
+# These requests are placeholders until entities are added.
+
+### DAB GraphQL endpoint placeholder
+POST {{dab}}/graphql
+Content-Type: application/json
+
+{
+	"query": "query { __typename }"
+}
+
+### DAB REST root placeholder
+GET {{dab}}/api
+Accept: application/json

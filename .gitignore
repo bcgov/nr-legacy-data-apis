@@ -1,0 +1,10 @@
+.env
+.env.*
+!.env.example
+
+# ORDS runtime-generated configuration, credentials, wallets, and self-signed certs
+ords/config/databases/
+ords/config/global/
+
+# Common local noise
+*.log
